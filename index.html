@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion avec Google</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1a1a1a; /* Dégradé de couleur en fond */
+            color: #fff; /* Couleur de police blanche */
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .header h1 {
+            font-size: 4em;
+            margin: 0;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #4dff4d; /* Nouvelle couleur de police */
+        }
+
+        .content {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            font-weight: lighter;
+        }
+
+        .google-btn {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease-in-out;
+            letter-spacing: 1px;
+        }
+
+        .google-btn:hover {
+            background-color: #357ae8;
+            box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.5);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Delivcrous Pipeline</h1>
+    </div>
+    <div class="content">
+        <h2>Se connecter avec Google</h2>
+        <button class="google-btn"
+            onclick="window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=205521028530-f4qpo5kj5qbav5st1g9o32qcl4jcm3mv.apps.googleusercontent.com&redirect_uri=http://127.0.0.1:5500/pipeline.html&response_type=code&scope=email%20profile';">
+            Connexion Google
+        </button>
+    </div>
+</body>
+</html>
