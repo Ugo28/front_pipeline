@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Connexion avec Google</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: #1a1a1a; /* Dégradé de couleur en fond */
-            color: #fff; /* Couleur de police blanche */
+            background: #1a1a1a;
+            /* Dégradé de couleur en fond */
+            color: #fff;
+            /* Couleur de police blanche */
             text-align: center;
             margin: 0;
             padding: 0;
@@ -23,7 +27,8 @@
             margin: 0;
             font-weight: bold;
             letter-spacing: 2px;
-            color: #4dff4d; /* Nouvelle couleur de police */
+            color: #4dff4d;
+            /* Nouvelle couleur de police */
         }
 
         .content {
@@ -61,16 +66,19 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1>Delivcrous Pipeline</h1>
     </div>
     <div class="content">
         <h2>Se connecter avec Google</h2>
-        <button class="google-btn"
-            onclick="window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=205521028530-f4qpo5kj5qbav5st1g9o32qcl4jcm3mv.apps.googleusercontent.com&redirect_uri=http://127.0.0.1:5500/pipeline.html&response_type=code&scope=email%20profile';">
-            Connexion Google
+        <button class="google-btn" onclick="signIn()">
+            <i class="fab fa-google"></i> Connexion Google
         </button>
+
     </div>
 </body>
+<script src="script.js"></script>
+
 </html>

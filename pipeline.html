@@ -147,68 +147,12 @@
             <h2>Déploiement</h2>
             <p>Status: En attente</p>
         </div>
+        <div id="user-info" style="position: absolute; top: 10px; left: 10px;">
+            <!-- Le nom de l'utilisateur sera affiché ici -->
+        </div>
+        <button id="logout-button" style="position: absolute; top: 10px; left: 300px;">Déconnexion</button>
     </div>
-
-    <!-- Ajoutez ici le JavaScript pour la logique de mise à jour du pipeline -->
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        console.log(code);
-        const clientId = '205521028530-f4qpo5kj5qbav5st1g9o32qcl4jcm3mv.apps.googleusercontent.com';
-        const clientSecret = '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';
-        const redirectUri = 'http://127.0.0.1:5500/pipeline.html';
-
-        const tokenUrl = 'https://accounts.google.com/o/oauth2/token';
-
-        const data = {
-            code: code,
-            client_id: clientId,
-            client_secret: clientSecret,
-            redirect_uri: redirectUri,
-            grant_type: 'authorization_code'
-        };
-
-        fetch(tokenUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams(data)
-        })
-            .then(response => response.json())
-            .then(data => {
-                const accessToken = data.access_token;
-                console.log('Access Token:', accessToken);
-                // Vous avez maintenant l'access token pour effectuer des requêtes API Google au nom de l'utilisateur.
-                getUserInfo(accessToken);
-            })
-            .catch(error => console.error('Erreur lors de la récupération du jeton d\'accès :', error));
-
-
-        function getUserInfo(accessToken) {
-            fetch('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + accessToken, {
-                headers: {
-                    Authorization: 'Bearer ' + accessToken,
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    const userEmail = data.email;
-
-                    // Vérifiez si l'utilisateur est un administrateur autorisé
-                    if (admins.includes(userEmail)) {
-                        // L'utilisateur est un administrateur, vous pouvez afficher la page
-                    } else {
-                        // L'utilisateur n'est pas un administrateur, redirigez-le ou affichez un message d'erreur
-                        alert("Accès refusé. Vous n'êtes pas autorisé à accéder à cette page.");
-                        window.location.href = 'index.html';
-                    }
-                })
-                .catch(error => console.error('Erreur : ' + error));
-        }
-        const admins = ['ogliugo@gmail.com'];
-    </script>
 </body>
+<script src="script.js"></script>
 
 </html>
