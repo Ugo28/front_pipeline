@@ -65,7 +65,92 @@ function fetchUserInfo(accessToken) {
         .catch(error => console.error('Erreur : ' + error));
 }
 
+function showLogs(stage) {
+    const logsModal = document.getElementById('logs-modal');
+    const logsContent = document.getElementById('logs-content');
+    const logModalTitle = document.getElementById('logModalTitle');
+    let logTitle = '';
+
+    switch (stage) {
+        case 'clone':
+            logTitle = 'Logs de l\'étape "Récupération du code"';
+            break;
+        case 'build':
+            logTitle = 'Logs de l\'étape "Compilation & Tests"';
+            break;
+        case 'increment':
+            logTitle = 'Logs de l\'étape "Increment"';
+            break;
+        case 'docker':
+            logTitle = 'Logs de l\'étape "Création image Docker & Update"';
+            break;
+        case 'deploy':
+            logTitle = 'Logs de l\'étape "Déploiement"';
+            break;
+    }
+
+    logModalTitle.textContent = logTitle;
+
+    // Vous devrez charger les logs appropriés ici depuis votre backend
+    const logs = [
+        "Log 1 de l'étape",
+        "Log 2 de l'étape",
+        "Log 3 de l'étape"
+    ];
+
+    logsContent.innerHTML = '';
+
+    logs.forEach(log => {
+        const logEntry = document.createElement('div');
+        logEntry.classList.add('log-entry');
+        logEntry.textContent = log;
+        logsContent.appendChild(logEntry);
+    });
+
+    logsModal.style.display = 'block';
+}
+
+function closeLogsModal() {
+    const logsModal = document.getElementById('logs-modal');
+    logsModal.style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', (event) => {
+    var socket = io.connect('http://172.20.10.2:5000'); // Utilisez l'adresse de votre serveur
+
+    socket.on('log_message', function (msg) {
+        var logsElement = document.getElementById('logs');
+        var newLogEntry = document.createElement('div');
+        newLogEntry.classList.add('log-entry');
+        newLogEntry.textContent = msg.data;
+        logsElement.appendChild(newLogEntry);
+
+        // Faire défiler automatiquement vers le bas pour afficher le dernier log
+        logsElement.scrollTop = logsElement.scrollHeight;
+    });
+
+    socket.on('ci_stage', function (stageData) {
+        // stageData devrait contenir les informations sur l'étape reçue du backend
+        // Mettez à jour l'affichage en conséquence (par exemple, en modifiant le texte ou la classe CSS des étapes)
+        console.log("Nouvelle étape de la pipeline reçue:", stageData);
+    
+        // Exemple : Mettre à jour le texte de l'étape
+        var stageElement = document.getElementById(stageData.id); // Assurez-vous d'attribuer un ID unique à chaque étape dans le HTML
+        if (stageElement) {
+            stageElement.querySelector('.status').textContent = `Status: ${stageData.status}`;
+    
+            // Mettez à jour la classe CSS en fonction du statut
+            if (stageData.status === "success") {
+                stageElement.classList.remove('erreur'); // Supprimez la classe d'erreur
+                stageElement.classList.add('termine'); // Ajoutez la classe de succès
+            } else if (stageData.status === "error") {
+                stageElement.classList.remove('termine'); // Supprimez la classe de succès
+                stageElement.classList.add('erreur'); // Ajoutez la classe d'erreur
+            }
+        }
+    });
+    
+    
     if (window.location.hash) {
         const accessToken = getAccessTokenFromUrl();
         console.log('Access Token:', accessToken);

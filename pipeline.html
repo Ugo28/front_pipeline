@@ -12,43 +12,32 @@
             background-color: #1a1a1a;
             color: #fff;
             display: flex;
-            /* Utiliser flexbox */
             flex-direction: column;
-            /* Alignement vertical des éléments */
             justify-content: center;
-            /* Centrage horizontal */
             align-items: center;
-            /* Centrage vertical */
             height: 100vh;
-            /* Hauteur totale de la fenêtre de visualisation */
             text-align: center;
         }
 
         h1 {
             color: #4dff4d;
             margin-bottom: 20px;
-            /* Espacement sous le titre */
         }
 
         .pipeline-container {
             display: flex;
             justify-content: space-around;
-            /* Espacement équilibré entre les éléments */
             align-items: center;
             flex-wrap: wrap;
-            /* Permettre aux éléments de passer à la ligne suivante si nécessaire */
             width: 100%;
             padding: 10px;
         }
 
         .stage {
             width: 150px;
-            /* Largeur fixe pour chaque étape */
             height: 150px;
-            /* Hauteur fixe pour chaque étape, identique à la largeur pour former un carré */
             text-align: center;
             margin: 10px;
-            /* Espacement autour de chaque étape */
             padding: 10px;
             border-radius: 10px;
             box-shadow: 5px 5px 15px #000000;
@@ -56,9 +45,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            /* Centrer le contenu verticalement */
             align-items: center;
-            /* Centrer le contenu horizontalement */
         }
 
         @media (max-width: 768px) {
@@ -66,10 +53,8 @@
                 padding: 5px;
                 margin: 2px;
                 font-size: 12px;
-                /* Réduire la taille de police pour les petits écrans */
             }
         }
-
 
         .stage:hover {
             background: linear-gradient(145deg, #292929, #222222);
@@ -103,56 +88,90 @@
 
         .erreur {
             background-color: #ff3333;
+            color: white; /* Texte en blanc pour contraster avec le rouge */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #logs {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 20px 0;
+            height: 300px;
+            overflow-y: scroll;
+            background-color: #f9f9f9;
+            color: black;
+        }
+
+        .log-entry {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
         }
     </style>
-
 </head>
 
 <body>
     <h1>CI/CD</h1>
-
     <div class="pipeline-container">
-        <!-- Étape 1: Récupération du code -->
-        <div class="stage">
+        <div class="stage en-attente" id="clone-stage" onmouseover="showLogs('clone')">
             <h2>Récupération du code</h2>
-            <p>Status: En cours</p>
+            <p class="status" id="clone-status">Status: En cours</p>
         </div>
-
-        <!-- Étape 2: Compilation -->
-        <div class="stage">
-            <h2>Compilation</h2>
-            <p>Status: En attente</p>
+        <div class="stage en-attente" id="build-stage" onmouseover="showLogs('build')">
+            <h2>Compilation & Tests</h2>
+            <p class="status" id="build-status">Status: En attente</p>
         </div>
-
-        <!-- Étape 3: Tests -->
-        <div class="stage">
-            <h2>Tests</h2>
-            <p>Status: En attente</p>
+        <div class="stage en-attente" id="increment-stage" onmouseover="showLogs('increment')">
+            <h2>Increment</h2>
+            <p class="status" id="increment-status">Status: En attente</p>
         </div>
-
-        <!-- Étape 4: Analyse SonarQube -->
-        <div class="stage">
-            <h2>Analyse SonarQube</h2>
-            <p>Status: En attente</p>
+        <div class="stage en-attente" id="docker-stage" onmouseover="showLogs('docker')">
+            <h2>Création image Docker & Update</h2>
+            <p class="status" id="docker-status">Status: En attente</p>
         </div>
-
-        <!-- Étape 5: Création image Docker -->
-        <div class="stage">
-            <h2>Création image Docker</h2>
-            <p>Status: En attente</p>
-        </div>
-
-        <!-- Étape 6: Déploiement -->
-        <div class="stage">
+        <div class="stage en-attente" id="deploy-stage" onmouseover="showLogs('deploy')">
             <h2>Déploiement</h2>
-            <p>Status: En attente</p>
+            <p class="status" id="deploy-status">Status: En attente</p>
         </div>
         <div id="user-info" style="position: absolute; top: 10px; left: 10px;">
             <!-- Le nom de l'utilisateur sera affiché ici -->
         </div>
         <button id="logout-button" style="position: absolute; top: 10px; left: 300px;">Déconnexion</button>
+        <div class="modal" id="logs-modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeLogsModal()">&times;</span>
+                <h2 id="logModalTitle">Logs de l'étape</h2>
+                <div id="logs-content"></div>
+            </div>
+        </div>
     </div>
 </body>
+<script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
 <script src="script.js"></script>
-
 </html>
